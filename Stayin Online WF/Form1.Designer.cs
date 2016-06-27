@@ -100,6 +100,8 @@
             this.dataGridViewMain.Name = "dataGridViewMain";
             this.dataGridViewMain.Size = new System.Drawing.Size(363, 236);
             this.dataGridViewMain.TabIndex = 1;
+            this.dataGridViewMain.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMain_CellValueChanged);
+            this.dataGridViewMain.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridViewMain_RowsAdded);
             // 
             // ActiveColumn
             // 
