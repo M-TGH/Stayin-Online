@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuProfiles = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuAddProfile = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,6 +40,7 @@
             this.SitesColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.StatusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IntervalColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMain)).BeginInit();
             this.SuspendLayout();
@@ -133,6 +135,11 @@
             this.IntervalColumn.Name = "IntervalColumn";
             this.IntervalColumn.Width = 50;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 5000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -164,6 +171,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn SitesColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn StatusColumn;
         private System.Windows.Forms.DataGridViewComboBoxColumn IntervalColumn;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
