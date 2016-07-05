@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Stayin_Online_WF
@@ -28,7 +23,8 @@ namespace Stayin_Online_WF
                 String target = dataGridViewMain[1, index] == null ?  (String)dataGridViewMain[1, index].Value : "";
                 String status = dataGridViewMain[2, index] == null ? (String)dataGridViewMain[2, index].Value : "";
                 String interval = dataGridViewMain[3, index] == null ? (String)dataGridViewMain[3, index].Value : "";
-                SiteItem tempSite = new SiteItem(active, target, status, interval);
+                Int32 position = index;
+                SiteItem tempSite = new SiteItem(active, target, status, interval, position);
                 tempSite.StatusChanged += siteStatusChanged;
                 sites.Add(tempSite);
             }
@@ -40,7 +36,8 @@ namespace Stayin_Online_WF
                     String target = (String)dataGridViewMain[1, i].Value;
                     String status = (String)dataGridViewMain[2, i].Value;
                     String interval = (String)dataGridViewMain[3, i].Value;
-                    SiteItem tempSite = new SiteItem(active, target, status, interval);
+                    Int32 position = i;
+                    SiteItem tempSite = new SiteItem(active, target, status, interval, position);
                     tempSite.StatusChanged += siteStatusChanged;
                     sites.Add(tempSite);
                 }
@@ -49,8 +46,9 @@ namespace Stayin_Online_WF
 
         private void siteStatusChanged(object sender, EventArgs e)
         {
-            //add status changing
-            MessageBox.Show(sender.ToString());
+            SiteItem obj = (SiteItem)sender;
+            Int32 position = obj.Position;
+            dataGridViewMain[2, position].Value = obj.Status;
         }
 
         private void dataGridViewMain_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -60,11 +58,25 @@ namespace Stayin_Online_WF
                 switch (column)
                 {
                     case 0:
-                        sites[e.RowIndex].Active = (Boolean)dataGridViewMain[e.ColumnIndex, e.RowIndex].Value;
-                        sites[e.RowIndex].Tick = 12;
+                        try
+                        {
+                            sites[e.RowIndex].Active = (Boolean)dataGridViewMain[e.ColumnIndex, e.RowIndex].Value;
+                        }
+                        catch(MissingFieldException err)
+                        {
+                            MessageBox.Show(err.Message);
+                        }
                         break;
                     case 1:
-                        sites[e.RowIndex].Target = (String)dataGridViewMain[e.ColumnIndex, e.RowIndex].Value;
+                        try
+                        {
+                            sites[e.RowIndex].Target = (String)dataGridViewMain[e.ColumnIndex, e.RowIndex].Value;
+                        }
+                        catch (Exception err)
+                        {
+                            MessageBox.Show(err.Message);
+                            dataGridViewMain[0, e.RowIndex].Value = false;
+                        }
                         break;
                     case 2:
                         sites[e.RowIndex].Status = (String)dataGridViewMain[e.ColumnIndex, e.RowIndex].Value;

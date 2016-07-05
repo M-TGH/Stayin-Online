@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Stayin_Online_WF
 {
@@ -14,6 +12,7 @@ namespace Stayin_Online_WF
         String _interval;
         String _status;
         Int32 _tick;
+        Int32 _position;
 
         public event EventHandler StatusChanged;
 
@@ -23,12 +22,13 @@ namespace Stayin_Online_WF
                 StatusChanged.Invoke(this, EventArgs.Empty);
         }
 
-        public SiteItem(Boolean active, String target, String status, String interval)
+        public SiteItem(Boolean active, String target, String status, String interval, Int32 position)
         {
             _active = active;
             _target = target;
             _status = status;
             _interval = interval;
+            _position = position;
         }
 
         public Boolean Active
@@ -41,9 +41,10 @@ namespace Stayin_Online_WF
             {
                 if (_interval == "" || _target == "")
                 {
-                    throw new MissingFieldException();
+                    throw new MissingFieldException("Please fill in the interval and target fields before making a row active.");
                 }
                 _active = value;
+                _tick = 12;
             }
         }
 
@@ -55,7 +56,16 @@ namespace Stayin_Online_WF
             }
             set
             {
-                _target = value;
+                string pattern = @"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)";
+                bool match = Regex.IsMatch(_target, pattern);
+                if (match)
+                {
+                    _target = value;
+                }
+                else
+                {
+                    throw new WebException("Input target was not a valid URL");
+                }
             }
         }
 
@@ -106,6 +116,18 @@ namespace Stayin_Online_WF
                         _tick = 0;
                     }
                 }
+            }
+        }
+
+        public Int32 Position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
             }
         }
 
